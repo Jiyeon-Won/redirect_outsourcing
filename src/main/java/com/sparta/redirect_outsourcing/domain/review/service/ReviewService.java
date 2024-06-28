@@ -72,4 +72,8 @@ public class ReviewService {
         return responseReviews;
     }
 
+    public ReviewResponseDto findReview(Long reviewId) {
+        Review findReview = reviewAdapter.findById(reviewId);
+        return ReviewResponseDto.of(findReview);
+    }
 }

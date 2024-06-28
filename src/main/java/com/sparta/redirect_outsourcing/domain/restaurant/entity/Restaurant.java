@@ -47,6 +47,8 @@ public class Restaurant extends TimeStampEntity {
 
     private String description;
 
+    private int likeCount;
+
     public Restaurant(User user, String name, String address, RestaurntCategoryEnum category, String description) {
         this.user = user;
         this.name = name;
@@ -83,5 +85,13 @@ public class Restaurant extends TimeStampEntity {
         if (!user.getUsername().equals(this.user.getUsername())) {
             throw new NotYourRestaurantException(ResponseCodeEnum.NOT_YOUR_RESTAURANT,user);
         }
+    }
+
+    public void plusLikeCount() {
+        ++this.likeCount;
+    }
+
+    public void minusLikeCount() {
+        --this.likeCount;
     }
 }

@@ -43,7 +43,13 @@ public enum ResponseCodeEnum {
     MENU_USER_NOT_MATCH(HttpStatus.FORBIDDEN,"다른 유저가 생성한 메뉴는 수정 삭제 할 수 없습니다."),
 
     //찜하기
-    ALREADY_FOLLOWED(HttpStatus.MULTI_STATUS,"이미 찜한 가게입니다.")
+    ALREADY_FOLLOWED(HttpStatus.MULTI_STATUS,"이미 찜한 가게입니다."),
+
+    // 좋아요
+    LiKE_OWN_REVIEW(HttpStatus.FORBIDDEN, "본인이 작성한 리뷰는 좋아요 기능을 이용할 수 없습니다."),
+    LiKE_OWN_RESTAURANT(HttpStatus.FORBIDDEN, "본인의 음식점은 좋아요 기능을 이용할 수 없습니다."),
+    ALREADY_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 등록한 상태입니다."),
+    ALREADY_UN_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 삭제한 상태입니다."),
 
     ;
     private final HttpStatus httpStatus;

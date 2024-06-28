@@ -60,5 +60,9 @@ public class ReviewController {
         return ResponseUtils.of(HttpStatus.OK,"리뷰 조회 성공",reviews);
     }
 
-
+    @GetMapping("/reviews/{reviewId}")
+    public ResponseEntity<DataResponseDto<ReviewResponseDto>> getReview(@PathVariable Long reviewId) {
+        ReviewResponseDto responseDto = reviewService.findReview(reviewId);
+        return ResponseUtils.of(HttpStatus.OK, "리뷰 단일 조회 성공", responseDto);
+    }
 }

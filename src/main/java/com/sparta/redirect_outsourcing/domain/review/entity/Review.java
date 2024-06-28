@@ -25,7 +25,6 @@ public class Review extends TimeStampEntity {
     private Float rating;
     @Column(nullable = false)
     private String comment;
-    @Setter
     @Column(nullable = false)
     private int likeCount;
 
@@ -48,5 +47,13 @@ public class Review extends TimeStampEntity {
     public void update(ReviewRequestDto requestDto){
         this.rating = requestDto.getRating();
         this.comment = requestDto.getComment();
+    }
+
+    public void plusLikeCount() {
+        ++this.likeCount;
+    }
+
+    public void minusLikeCount() {
+        --this.likeCount;
     }
 }
