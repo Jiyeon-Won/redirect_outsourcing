@@ -72,7 +72,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/menus/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/likes/**").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 

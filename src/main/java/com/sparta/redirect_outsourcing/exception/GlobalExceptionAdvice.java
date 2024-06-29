@@ -66,6 +66,11 @@ public class GlobalExceptionAdvice {
         return ResponseUtils.of(e.getResponseCodeEnum().getHttpStatus(),e.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<MessageResponseDto> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("에러 메세지: {}", e.getMessage());
+        return ResponseUtils.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<DataResponseDto<List<String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {

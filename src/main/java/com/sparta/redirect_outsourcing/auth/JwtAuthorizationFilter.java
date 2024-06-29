@@ -35,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
 
     private final List<String> getMethodWhiteList = List.of(
-            "/users", "/restaurants", "/restaurants", "/reviews", "/menus", "/likes"
+            "/users", "/restaurants", "/reviews", "/menus"
     );
 
     private final List<String> anyMethodWhiteList = List.of(

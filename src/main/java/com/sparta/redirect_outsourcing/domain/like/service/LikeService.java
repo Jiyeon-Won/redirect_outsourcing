@@ -1,10 +1,14 @@
 package com.sparta.redirect_outsourcing.domain.like.service;
 
+import com.sparta.redirect_outsourcing.common.PageUtils;
 import com.sparta.redirect_outsourcing.common.ResponseCodeEnum;
 import com.sparta.redirect_outsourcing.domain.like.dto.LikeRequestDto;
+import com.sparta.redirect_outsourcing.domain.like.dto.LikeResponseRestaurantDto;
+import com.sparta.redirect_outsourcing.domain.like.dto.LikeResponseReviewDto;
 import com.sparta.redirect_outsourcing.domain.like.entity.ContentsTypeEnum;
 import com.sparta.redirect_outsourcing.domain.like.entity.Like;
 import com.sparta.redirect_outsourcing.domain.like.repository.LikeAdapter;
+import com.sparta.redirect_outsourcing.domain.restaurant.dto.responseDto.RestaurantResponseDto;
 import com.sparta.redirect_outsourcing.domain.restaurant.entity.Restaurant;
 import com.sparta.redirect_outsourcing.domain.restaurant.repository.RestaurantAdapter;
 import com.sparta.redirect_outsourcing.domain.review.entity.Review;
@@ -16,11 +20,15 @@ import com.sparta.redirect_outsourcing.exception.custom.restaurant.CannotLikeOwn
 import com.sparta.redirect_outsourcing.exception.custom.restaurant.CannotUnLikeOwnRestaurantException;
 import com.sparta.redirect_outsourcing.exception.custom.review.CannotUnLikeOwnReviewException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LikeService {
@@ -78,5 +86,19 @@ public class LikeService {
         }
 
         likeAdapter.deleteLike(user.getId(), requestDto.getContentsId(), requestDto.getContentsType());
+    }
+
+    @Transactional(readOnly = true)
+    public List<LikeResponseRestaurantDto> findLikeRestaurantsWithPage(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = PageUtils.of(page, size, sortBy, isAsc);
+
+        return likeAdapter.findLikeRestaurantsWithPage(user.getId(), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LikeResponseReviewDto> findLikeReviewsWithPage(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = PageUtils.of(page, size, sortBy, isAsc);
+
+        return likeAdapter.findLikeReviewsWithPage(user.getId(), pageable);
     }
 }

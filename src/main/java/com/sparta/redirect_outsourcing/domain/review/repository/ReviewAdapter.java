@@ -1,6 +1,7 @@
 package com.sparta.redirect_outsourcing.domain.review.repository;
 
 import com.sparta.redirect_outsourcing.common.ResponseCodeEnum;
+import com.sparta.redirect_outsourcing.domain.review.dto.ReviewResponseDto;
 import com.sparta.redirect_outsourcing.domain.review.entity.Review;
 import com.sparta.redirect_outsourcing.exception.custom.review.ReviewNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -25,7 +27,7 @@ public class ReviewAdapter {
 
     public Review findById(Long reviewId){
         Review findReview = reviewQueryRepository.findById(reviewId);
-        if (findReview == null) {
+        if (Objects.isNull(findReview)) {
             throw new ReviewNotFoundException(ResponseCodeEnum.REVIEW_NOT_FOUND);
         }
         return findReview;
@@ -34,5 +36,4 @@ public class ReviewAdapter {
     public List<Review> findByRestaurantId(Long restaurantId){
         return reviewQueryRepository.findAllByRestaurantId(restaurantId);
     }
-
 }
