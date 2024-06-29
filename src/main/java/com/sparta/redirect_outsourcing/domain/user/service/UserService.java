@@ -2,10 +2,7 @@ package com.sparta.redirect_outsourcing.domain.user.service;
 
 import com.sparta.redirect_outsourcing.common.ResponseCodeEnum;
 import com.sparta.redirect_outsourcing.common.S3Uploader;
-import com.sparta.redirect_outsourcing.domain.user.dto.ProfileResponseDto;
-import com.sparta.redirect_outsourcing.domain.user.dto.SignupRequestDto;
-import com.sparta.redirect_outsourcing.domain.user.dto.UpdatePasswordRequestDto;
-import com.sparta.redirect_outsourcing.domain.user.dto.UpdateProfileRequestDto;
+import com.sparta.redirect_outsourcing.domain.user.dto.*;
 import com.sparta.redirect_outsourcing.domain.user.entity.User;
 import com.sparta.redirect_outsourcing.domain.user.entity.UserRoleEnum;
 import com.sparta.redirect_outsourcing.domain.user.entity.UserStatusEnum;
@@ -109,9 +106,9 @@ public class UserService {
     }
 
     // 프로필 조회
-    public ProfileResponseDto getProfile(Long userId) {
-        User user = userAdapter.findById(userId);
-        return new ProfileResponseDto(user.getNickname(), user.getIntroduce(), user.getPictureUrl());
+    public ProfileLikesResponseDto getProfile(Long userId) {
+        ProfileLikesResponseDto responseDto = userAdapter.findByUserId(userId);
+        return responseDto;
     }
 
     // 로그아웃
