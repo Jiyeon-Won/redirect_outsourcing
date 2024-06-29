@@ -1,41 +1,62 @@
 package com.sparta.redirect_outsourcing.domain.follow.service;
 
-import com.sparta.redirect_outsourcing.domain.follow.dto.responseDto.FollowResponseDto;
+import com.sparta.redirect_outsourcing.common.ResponseCodeEnum;
 import com.sparta.redirect_outsourcing.domain.follow.entity.Follow;
 import com.sparta.redirect_outsourcing.domain.follow.repository.FollowAdapter;
-import com.sparta.redirect_outsourcing.domain.restaurant.entity.Restaurant;
-import com.sparta.redirect_outsourcing.domain.restaurant.repository.RestaurantAdapter;
 import com.sparta.redirect_outsourcing.domain.user.entity.User;
+import com.sparta.redirect_outsourcing.domain.user.repository.UserAdapter;
+import com.sparta.redirect_outsourcing.exception.custom.follow.AlreadyFollowException;
+import com.sparta.redirect_outsourcing.exception.custom.follow.AlreadyUnFollowException;
+import com.sparta.redirect_outsourcing.exception.custom.follow.CannotFollowSelf;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class FollowService {
-    public final FollowAdapter followAdapter;
-    private final RestaurantAdapter restaurantAdapter;
+    private final FollowAdapter followAdapter;
+    private final UserAdapter userAdapter;
 
-    public boolean toggleFollow(Long restaurantId, User user) {
-        //찜하기 대상 가게 불러오기
-        Restaurant restaurant = restaurantAdapter.findById(restaurantId);
+    @Transactional
+    public void addFollow(User loginUser, Long followUserId) {
+        checkFollowSelf(loginUser, followUserId);
+        existFollow(loginUser, followUserId);
 
-        Optional<Follow> findFollow = followAdapter.findByUserIdAndRestaurantId(user.getId(), restaurantId);
-        // 이미 짐한 경우(DB에 찜하기 기록이 있음)
-        if (findFollow.isPresent()) {
-            followAdapter.delete(findFollow.get());
-            return false;
-        }
-        // 찜하지 않았을 경우(DB에 찜하기 기록이 없음)
-        else {
-            followAdapter.save(new Follow(user, restaurant));
-            return true;
+        User findUser = userAdapter.findById(followUserId);
+
+        Follow follow = Follow.builder()
+                .follower(findUser)
+                .followee(loginUser)
+                .build();
+        followAdapter.addFollow(follow);
+    }
+
+    @Transactional
+    public void deleteFollow(User loginUser, Long followUserId) {
+        checkFollowSelf(loginUser, followUserId);
+        notExistFollow(loginUser, followUserId);
+
+        followAdapter.deleteById(loginUser.getId(), followUserId);
+    }
+
+    private void existFollow(User loginUser, Long followUserId) {
+        if (followAdapter.existFollow(loginUser.getId(), followUserId)) {
+            throw new AlreadyFollowException(ResponseCodeEnum.ALREADY_FOLLOWED);
         }
     }
 
-    public List<FollowResponseDto> getFollows(User user) {
-        return followAdapter.findById(user.getId()).stream().map(FollowResponseDto::new).toList();
+    private void notExistFollow(User loginUser, Long followUserId) {
+        if (!followAdapter.existFollow(loginUser.getId(), followUserId)) {
+            throw new AlreadyUnFollowException(ResponseCodeEnum.ALREADY_UN_FOLLOWED);
+        }
+    }
+
+    private void checkFollowSelf(User loginUser, Long followUserId) {
+        if (Objects.equals(loginUser.getId(), followUserId)) {
+            throw new CannotFollowSelf(ResponseCodeEnum.FOLLOW_SELF);
+        }
     }
 }

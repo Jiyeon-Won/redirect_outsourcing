@@ -1,31 +1,23 @@
 package com.sparta.redirect_outsourcing.domain.follow.repository;
 
-import com.sparta.redirect_outsourcing.domain.follow.dto.responseDto.FollowResponseDto;
 import com.sparta.redirect_outsourcing.domain.follow.entity.Follow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class FollowAdapter {
-    public final FollowRepository followRepository;
+    public final FollowQueryRepository followQueryRepository;
 
-    public void save(Follow follow) {
-         followRepository.save(follow);
+    public boolean existFollow(Long loginUserId, Long followUserId) {
+        return followQueryRepository.existFollow(loginUserId, followUserId);
     }
 
-    public List<Follow> findById(Long userId) {
-        return followRepository.findAllByUserId(userId);
+    public void addFollow(Follow follow) {
+        followQueryRepository.addFollow(follow);
     }
 
-    public Optional<Follow> findByUserIdAndRestaurantId(Long userId, Long restaurantId) {
-        return followRepository.findByUserIdAndRestaurantId(userId, restaurantId);
-    }
-
-    public void delete(Follow follow) {
-        followRepository.delete(follow);
+    public void deleteById(Long loginUserId, Long followUserId) {
+        followQueryRepository.deleteById(loginUserId, followUserId);
     }
 }

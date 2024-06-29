@@ -3,6 +3,7 @@ package com.sparta.redirect_outsourcing.exception;
 import com.sparta.redirect_outsourcing.common.DataResponseDto;
 import com.sparta.redirect_outsourcing.common.MessageResponseDto;
 import com.sparta.redirect_outsourcing.common.ResponseUtils;
+import com.sparta.redirect_outsourcing.exception.custom.follow.FollowException;
 import com.sparta.redirect_outsourcing.exception.custom.like.LikeException;
 import com.sparta.redirect_outsourcing.exception.custom.menu.MenuException;
 import com.sparta.redirect_outsourcing.exception.custom.order.OrderException;
@@ -62,6 +63,12 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(NotYourRestaurantException.class)
     public ResponseEntity<MessageResponseDto> handleNotYourRestaurantException(NotYourRestaurantException e) {
+        log.error("에러 메세지: ", e);
+        return ResponseUtils.of(e.getResponseCodeEnum().getHttpStatus(),e.getMessage());
+    }
+
+    @ExceptionHandler(FollowException.class)
+    public ResponseEntity<MessageResponseDto> handleFollowException(FollowException e) {
         log.error("에러 메세지: ", e);
         return ResponseUtils.of(e.getResponseCodeEnum().getHttpStatus(),e.getMessage());
     }
