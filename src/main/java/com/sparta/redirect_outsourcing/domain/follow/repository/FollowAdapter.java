@@ -26,7 +26,7 @@ public class FollowAdapter {
         followQueryRepository.deleteById(loginUserId, followUserId);
     }
 
-    public List<RestaurantResponseDto> findByFollowerLikesRestaurant(User loginUser, Pageable pageable) {
-        return followQueryRepository.findByFollowerLikesRestaurant(loginUser, pageable);
+    public List<RestaurantResponseDto> findByFollowerLikesRestaurant(User loginUser, Pageable pageable, String sortBy, boolean isAsc) {
+        return followQueryRepository.findByFollowerLikesRestaurant(loginUser, pageable, sortBy, isAsc);
     }
 }

@@ -48,7 +48,7 @@ public class FollowQueryRepository {
                 ).execute();
     }
 
-    public List<RestaurantResponseDto> findByFollowerLikesRestaurant(User loginUser, Pageable pageable) {
+    public List<RestaurantResponseDto> findByFollowerLikesRestaurant(User loginUser, Pageable pageable, String sortBy, boolean isAsc) {
         List<Tuple> fetch = query.select(
                         restaurant.id,
                         restaurant.name,
@@ -56,7 +56,8 @@ public class FollowQueryRepository {
                         restaurant.category,
                         restaurant.description,
                         restaurant.createdAt,
-                        restaurant.likeCount
+                        restaurant.likeCount,
+                        user.nickname
                 )
                 .from(restaurant)
                 .join(like).on(restaurant.id.eq(like.contentsId))
@@ -69,7 +70,7 @@ public class FollowQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(
-                        new OrderSpecifier<>(Order.DESC, restaurant.createdAt)
+                        getOrderCreatedAt(sortBy, isAsc)
                 )
                 .fetch();
 
@@ -84,5 +85,18 @@ public class FollowQueryRepository {
                     .likeCount(tuple.get(restaurant.likeCount))
                     .build()
         ).toList();
+    }
+
+    private OrderSpecifier<?> getOrderCreatedAt(String sortBy, boolean isAsc) {
+        Order order = isAsc ? Order.ASC : Order.DESC;
+        log.info("정렬 기준: {}", sortBy);
+        switch (sortBy) {
+            case "createdAt":
+                return new OrderSpecifier<>(order, restaurant.createdAt);
+            case "name":
+                return new OrderSpecifier<>(order, user.nickname);
+            default:
+                return new OrderSpecifier<>(Order.DESC, restaurant.createdAt);
+        }
     }
 }

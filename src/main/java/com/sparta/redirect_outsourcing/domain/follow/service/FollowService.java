@@ -11,6 +11,7 @@ import com.sparta.redirect_outsourcing.exception.custom.follow.AlreadyFollowExce
 import com.sparta.redirect_outsourcing.exception.custom.follow.AlreadyUnFollowException;
 import com.sparta.redirect_outsourcing.exception.custom.follow.CannotFollowSelf;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +49,9 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<RestaurantResponseDto> findByFollowerLikesRestaurant(User loginUser, int page, int size, String sortBy, boolean isAsc) {
-        Pageable pageable = PageUtils.of(page, size, sortBy, isAsc);
-        List<RestaurantResponseDto> responseDtoList = followAdapter.findByFollowerLikesRestaurant(loginUser, pageable);
+//        Pageable pageable = PageUtils.of(page, size, sortBy, isAsc);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<RestaurantResponseDto> responseDtoList = followAdapter.findByFollowerLikesRestaurant(loginUser, pageable, sortBy, isAsc);
         return responseDtoList;
     }
 
