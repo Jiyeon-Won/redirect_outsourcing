@@ -59,3 +59,15 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def generated = 'src/main/generated'
+
+// QueryDSL QClass 파일 생성 위치 지정
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+// gradle clean 시 QClass 디렉토리 삭제
+clean {
+    delete file(generated)
+}

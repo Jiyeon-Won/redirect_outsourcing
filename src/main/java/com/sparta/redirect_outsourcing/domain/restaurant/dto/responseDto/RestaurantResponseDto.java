@@ -2,12 +2,16 @@ package com.sparta.redirect_outsourcing.domain.restaurant.dto.responseDto;
 
 import com.sparta.redirect_outsourcing.domain.restaurant.entity.Restaurant;
 import com.sparta.redirect_outsourcing.domain.restaurant.entity.RestaurntCategoryEnum;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class RestaurantResponseDto {
+    private Long id;
     private String name;
     private String address;
     private String category;
@@ -16,6 +20,7 @@ public class RestaurantResponseDto {
     private int likeCount;
 
     public RestaurantResponseDto(Restaurant restaurant) {
+        this.id = restaurant.getId();
         this.name = restaurant.getName();
         this.address = restaurant.getAddress();
         this.category = restaurant.getCategory().getCuisineType();
@@ -23,5 +28,4 @@ public class RestaurantResponseDto {
         this.createdAt = restaurant.getCreatedAt();
         this.likeCount = restaurant.getLikeCount();
     }
-
 }
