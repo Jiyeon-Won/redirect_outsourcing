@@ -22,7 +22,6 @@ public class User extends TimeStampEntity {
     private Long id;
 
     @NotNull
-    @Column(unique = true)
     private String username;
 
     @NotNull

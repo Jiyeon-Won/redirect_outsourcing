@@ -13,6 +13,7 @@ spring:
       encoding: UTF-8
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:

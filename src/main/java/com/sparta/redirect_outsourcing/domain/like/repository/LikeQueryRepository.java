@@ -1,5 +1,7 @@
 package com.sparta.redirect_outsourcing.domain.like.repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.redirect_outsourcing.domain.like.dto.LikeResponseRestaurantDto;
 import com.sparta.redirect_outsourcing.domain.like.dto.LikeResponseReviewDto;
@@ -64,6 +66,7 @@ public class LikeQueryRepository {
                 .where(like.user.id.eq(userId)
                         .and(like.contentsType.eq(type))
                 )
+                .orderBy(new OrderSpecifier<>(Order.DESC, restaurant.createdAt))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -79,6 +82,7 @@ public class LikeQueryRepository {
                 .where(like.user.id.eq(userId)
                         .and(like.contentsType.eq(type))
                 )
+                .orderBy(new OrderSpecifier<>(Order.DESC, review.createdAt))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
